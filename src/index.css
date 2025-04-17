@@ -1,23 +1,55 @@
 @import "tailwindcss";
 
-
 @layer utilities {
-    @keyframes typewriter {
-      0% {
-        width: 0;
-        opacity: 0;
-      }
-      100% {
-        width: 100%;
-        opacity: 1;
-      }
-    }
-  
-    .typewriter {
-      display: inline-block;
-      overflow: hidden;
-      white-space: nowrap;
+  /* Typewriter Animation */
+  @keyframes typewriter {
+    0% {
       width: 0;
-      animation: typewriter 5s steps(30) infinite;
+      opacity: 0;
+    }
+    100% {
+      width: 100%;
+      opacity: 1;
     }
   }
+/*
+  @keyframes slideLR {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(-10px); }
+  }
+  */
+  .typewriter {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
+    animation: typewriter 5s steps(30) infinite;
+  }
+
+  /* Hide scrollbar for Chrome, Safari, and Opera */
+  .sidebar-no-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge, and Firefox */
+  .sidebar-no-scroll {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
+
+  /* Fade In Up Animation */
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fadeInUp {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+}
