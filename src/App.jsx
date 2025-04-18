@@ -9,6 +9,7 @@ import FruitySoda from "./components/Customer/Menu/FruitySoda";
 import NonCoffee from "./components/Customer/Menu/NonCoffee";
 import Pastries from "./components/Customer/Menu/Pastries";
 
+
 function App() {
   return (
     <Router>
@@ -21,6 +22,7 @@ function App() {
         <Route path="/kiosk/nonCoffee" element={<NonCoffee />} />
         <Route path="/kiosk/fruitySoda" element={<FruitySoda />} />
         <Route path="/kiosk/pastries" element={<Pastries />} />
+        
       </Routes>
     </Router>
   );

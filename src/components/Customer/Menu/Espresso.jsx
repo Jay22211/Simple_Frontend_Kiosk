@@ -3,6 +3,9 @@ import Sidebar from "../Sidebar";
 import { AiFillRest } from "react-icons/ai";
 import { TbCoffee, TbCoffeeOff } from "react-icons/tb";
 import { IoArrowBackCircle } from "react-icons/io5"; 
+import useCartStore from "../cartStore";
+import CartDrawer from "../CartDrawer";
+import CartIcon from "../CartIcon"; 
 
 const espresso = [
   {
@@ -145,16 +148,43 @@ const Espresso = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedSize, setSelectedSize] = useState("Grande");
   const [selectedTemp, setSelectedTemp] = useState("Hot");
+  const [showBubble, setShowBubble] = useState(false);
+  const [bubbleImg, setBubbleImg] = useState(null);
+  
+
+  const { addToCart } = useCartStore();
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
     setSelectedSize("Grande");
     setSelectedTemp("Hot");
+    
   };
+
 
   const handleClose = () => {         
     setSelectedItem(null);
   };
+
+  const handleAddToOrder = () => {
+    addToCart({
+      id: selectedItem.id,
+      name: selectedItem.name,
+      size: selectedSize,
+      temperature: selectedTemp,
+      price: getSelectedPrice(selectedItem, selectedSize, selectedTemp),
+      img: selectedItem.img,
+    });
+  
+    setBubbleImg(selectedItem.img); // cache image
+    setShowBubble(true);
+  
+    setTimeout(() => setShowBubble(false), 1000);
+    setTimeout(() => setBubbleImg(null), 1000); // optional cleanup
+  
+    handleClose(); // Close modal
+  };
+
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-[#eee4d4] to-[#eee4d4]">
@@ -297,14 +327,34 @@ const Espresso = () => {
   <p className="text-xl font-bold text-[#4b2e2e]">₱{getSelectedPrice(selectedItem, selectedSize, selectedTemp)}</p>
 </div>
 
-          <button className="w-full py-4 rounded-full bg-[#4b2e2e] text-white text-xl font-bold shadow-md hover:bg-[#3c2424] transition-all duration-300 transform hover:scale-[1.02]">
-             Add to Order
-          </button>
+<button
+  onClick={handleAddToOrder}
+  className="w-full py-4 rounded-full bg-[#4b2e2e] text-white text-xl font-bold shadow-md hover:bg-[#3c2424] transition-all duration-300 transform hover:scale-[1.02]"
+>
+  Add to Order
+</button>
         </div>
       </div>
     </div>
   </div>
 )}
+{showBubble && (
+  <div className="fixed top-30 right-12 z-[9999] animate-floatUp transition-opacity duration-1000">
+    <div className="relative bg-white rounded-full shadow-xl border border-[#4b2e2e]/20 w-16 h-16 p-1 flex items-center justify-center">
+      {/* Bubble tail/arrow */}
+      <div className="absolute -top-2 right-5.6 w-5 h-5 bg-white transform rotate-45 border-t border-l border-[#4b2e2e]/20" />
+
+      {/* Product image */}
+      <img
+        src={bubbleImg}
+        alt="added to cart"
+        className="w-full h-full object-contain rounded-full"
+      />
+    </div>
+  </div>
+)}
+<CartIcon />
+<CartDrawer />
     </div>
   );
 };
