@@ -13,4 +13,4 @@ If you are developing a production application, we recommend using TypeScript an
 
 
 (Currently a work in progress 🚧 — adding more features soon!)
-![Uploading image.png…]()
+
