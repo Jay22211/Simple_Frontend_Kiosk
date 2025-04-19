@@ -1,6 +1,7 @@
 import React from 'react';
 import Sidebar from "../components/Customer/Sidebar";
 
+
 const Kiosk = () => {
   return (
     <div className="flex h-screen bg-gray-100">

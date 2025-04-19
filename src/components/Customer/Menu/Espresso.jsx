@@ -7,110 +7,110 @@ import useCartStore from "../cartStore";
 import CartDrawer from "../CartDrawer";
 import CartIcon from "../CartIcon"; 
 
-const espresso = [
-  {
-    id: 1,
-    name: "Americano",
-    description: "Bold and rich coffee with a smooth finish",
-    pricing: {
-      Hot: { Tall: 70, Grande: 85 },
-      Cold: { Tall: 80, Grande: 95 },
+  const espresso = [
+    {
+      id: 1,
+      name: "Americano",
+      description: "Bold and rich coffee with a smooth finish",
+      pricing: {
+        Hot: { Tall: 70, Grande: 85 },
+        Cold: { Tall: 80, Grande: 95 },
+      },
+      img: "/images/Americano.png",
+      alt: "Hot espresso Americano in a ceramic cup.",
     },
-    img: "/images/Americano.png",
-    alt: "Hot espresso Americano in a ceramic cup.",
-  },
-  {
-    id: 2,
-    name: "Latte",
-    description: "Enjoy a harmonious balance of smooth espresso and milk.",
-    pricing: {
-      Hot: { Tall: 90, Grande: 110 },
-      Cold: { Tall: 100, Grande: 120 },
+    {
+      id: 2,
+      name: "Latte",
+      description: "Enjoy a harmonious balance of smooth espresso and milk.",
+      pricing: {
+        Hot: { Tall: 90, Grande: 110 },
+        Cold: { Tall: 100, Grande: 120 },
+      },
+      img: "/images/Latte.png",
+      alt: "Smooth classic latte with milk.",
     },
-    img: "/images/Latte.png",
-    alt: "Smooth classic latte with milk.",
-  },
-  {
-    id: 3,
-    name: "Caramel Macchiato",
-    description: "A perfect fusion of rich espresso, steamed milk, and a decadent swirl of caramel.",
-    pricing: {
-      Hot: { Tall: 100, Grande: 120 },
-      Cold: { Tall: 110, Grande: 130 },
+    {
+      id: 3,
+      name: "Caramel Macchiato",
+      description: "A perfect fusion of rich espresso, steamed milk, and a decadent swirl of caramel.",
+      pricing: {
+        Hot: { Tall: 100, Grande: 120 },
+        Cold: { Tall: 110, Grande: 130 },
+      },
+      img: "/images/CaramelMacchiato.png",
+      alt: "Rich caramel macchiato with espresso.",
     },
-    img: "/images/CaramelMacchiato.png",
-    alt: "Rich caramel macchiato with espresso.",
-  },
-  {
-    id: 4,
-    name: "Salted Caramel",
-    description: "Dive into the rich and flavorful taste of Salted Caramel, featuring the perfect balance of sweet and salty flavors.",
-    variations: {
-      hot: { tall: 115, grande: 130 },
-      iced: { tall: 125, grande: 140 },
+    {
+      id: 4,
+      name: "Salted Caramel",
+      description: "Dive into the rich and flavorful taste of Salted Caramel, featuring the perfect balance of sweet and salty flavors.",
+      variations: {
+        hot: { tall: 115, grande: 130 },
+        iced: { tall: 125, grande: 140 },
+      },
+      img: "/images/SaltedCaramel.png",
+      alt: "Sweet and salty caramel espresso drink.",
     },
-    img: "/images/SaltedCaramel.png",
-    alt: "Sweet and salty caramel espresso drink.",
-  },
-  {
-    id: 5,
-    name: "Spanish Latte",
-    description: "Enjoy a delightful fusion of bold espresso and rich condensed milk.",
-    variations: {
-      hot: { tall: 95, grande: 110 },
-      iced: { tall: 105, grande: 120 },
+    {
+      id: 5,
+      name: "Spanish Latte",
+      description: "Enjoy a delightful fusion of bold espresso and rich condensed milk.",
+      variations: {
+        hot: { tall: 95, grande: 110 },
+        iced: { tall: 105, grande: 120 },
+      },
+      img: "/images/SpanishLatte.png",
+      alt: "Creamy Spanish latte served iced.",
     },
-    img: "/images/SpanishLatte.png",
-    alt: "Creamy Spanish latte served iced.",
-  },
-  {
-    id: 6,
-    name: "Vanilla Latte",
-    description: "Enjoy a perfect blend of smooth espresso and creamy vanilla!",
-    variations: {
-      hot: { tall: 90, grande: 105 },
-      iced: { tall: 100, grande: 115 },
+    {
+      id: 6,
+      name: "Vanilla Latte",
+      description: "Enjoy a perfect blend of smooth espresso and creamy vanilla!",
+      variations: {
+        hot: { tall: 90, grande: 105 },
+        iced: { tall: 100, grande: 115 },
+      },
+      img: "/images/VanillaLatte.png",
+      alt: "Smooth vanilla latte in a cozy cup.",
     },
-    img: "/images/VanillaLatte.png",
-    alt: "Smooth vanilla latte in a cozy cup.",
-  },
-  {
-    id: 7,
-    name: "Dirty Matcha",
-    description: "Enjoy the delightful combination of smooth and creamy Matcha coffee.",
-    variations: {
-      hot: { tall: 95, grande: 110 },
-      iced: { tall: 105, grande: 120 },
+    {
+      id: 7,
+      name: "Dirty Matcha",
+      description: "Enjoy the delightful combination of smooth and creamy Matcha coffee.",
+      variations: {
+        hot: { tall: 95, grande: 110 },
+        iced: { tall: 105, grande: 120 },
+      },
+      img: "/images/DirtyMatcha.png",
+      alt: "Matcha latte with a shot of espresso.",
     },
-    img: "/images/DirtyMatcha.png",
-    alt: "Matcha latte with a shot of espresso.",
-  },
-  {
-    id: 8,
-    name: "Ube Latte",
-    description: "Experience the unique and delightful flavor of this Ube Latte.",
-    variations: {
-      hot: { tall: 100, grande: 115 },
-      iced: { tall: 110, grande: 125 },
+    {
+      id: 8,
+      name: "Ube Latte",
+      description: "Experience the unique and delightful flavor of this Ube Latte.",
+      variations: {
+        hot: { tall: 100, grande: 115 },
+        iced: { tall: 110, grande: 125 },
+      },
+      img: "/images/UbeLatte.png",
+      alt: "Vibrant purple ube latte with creamy texture.",
     },
-    img: "/images/UbeLatte.png",
-    alt: "Vibrant purple ube latte with creamy texture.",
-  },
-  {
-    id: 9,
-    name: "White Chocolate Mocha",
-    description: "A delightful blend of rich white chocolate and aromatic espresso, creating a creamy and indulgent coffee experience",
-    variations: {
-      hot: { tall: 110, grande: 125 },
-      iced: { tall: 120, grande: 135 },
+    {
+      id: 9,
+      name: "White Chocolate Mocha",
+      description: "A delightful blend of rich white chocolate and aromatic espresso, creating a creamy and indulgent coffee experience",
+      variations: {
+        hot: { tall: 110, grande: 125 },
+        iced: { tall: 120, grande: 135 },
+      },
+      img: "/images/WhiteChocolateMocha.png",
+      alt: "Rich white chocolate mocha topped with cream.",
     },
-    img: "/images/WhiteChocolateMocha.png",
-    alt: "Rich white chocolate mocha topped with cream.",
-  },
-];
+  ];
 
 const sizeOptions = ["Tall", "Grande"];
-const temperatureOptions = ["Hot", "Cold"];
+const temperatureOptions = ["Hot", "Cold"]; 
 
 const getUnifiedPricing = (item) => {
   if (item.pricing) return item.pricing;
@@ -190,9 +190,10 @@ const Espresso = () => {
     <div className="flex h-screen bg-gradient-to-br from-[#eee4d4] to-[#eee4d4]">
       <Sidebar />
       <div className="flex-grow overflow-y-auto px-4 py-10 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-extrabold text-[#4b2e2e] mb-10 text-center font-playfair">
+        <h1 className="text-3xl font-extrabold text-[#4b2e2e] mb-10 text-center font-poppins">
           Espresso
         </h1>
+
         <hr className="border-t-2 border-[#4b2e2e] w-30 mx-auto mb-5" />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -230,14 +231,14 @@ const Espresso = () => {
     <div className="absolute top-4 right-5 flex flex-col items-end group">
       
 
-    <div className="absolute top-1 left--1 flex items-center gap-1 whitespace-nowrap group cursor-pointer" onClick={handleClose}>
-  <span className="text-[#4b2e2e] font-medium text-sm sm:text-base group-hover:underline transition-all duration-300">
-    Back to menu
-  </span>
-  <IoArrowBackCircle
-  className="text-3xl sm:text-4xl text-[#4b2e2e] hover:text-[#2e1b1b] rotate-180 transition-all duration-300 drop-shadow-sm animate-[slideLR_1.2s_infinite]"
-/>
-</div>
+      <div className="absolute top-1 left--1 flex items-center gap-1 whitespace-nowrap group cursor-pointer" onClick={handleClose}>
+    <span className="text-[#4b2e2e] font-medium text-sm sm:text-base group-hover:underline transition-all duration-300">
+      Back to menu
+    </span>
+    <IoArrowBackCircle
+    className="text-3xl sm:text-4xl text-[#4b2e2e] hover:text-[#2e1b1b] rotate-180 transition-all duration-300 drop-shadow-sm animate-[slideLR_1.2s_infinite]"
+  />
+  </div>
 
 </div>
 
@@ -318,6 +319,7 @@ const Espresso = () => {
               </div>
             </div>
           </div>
+
 
           <div className="bg-[#f5ead1] rounded-xl p-4 mb-6 text-center shadow-sm border border-[#e4d3b6] mx-auto w-130">
   <p className="text-sm text-[#4b2e2e] font-semibold mb-1">Your Selection:</p>

@@ -13,7 +13,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-[240px] min-w-[240px] h-screen bg-[#924d0d] border-r p-4 flex flex-col items-center overflow-y-auto space-y-6 sidebar-no-scroll">
+    <div className="w-[240px] min-w-[240px] h-screen bg-[#4b2e2e] border-r p-4 flex flex-col items-center overflow-y-auto space-y-6 sidebar-no-scroll">
       {/* Logo */}
       <div className="flex justify-center mb-8">
         <img 
@@ -44,7 +44,7 @@ const Sidebar = () => {
                 className="w-24 h-24 mb-4 object-cover rounded-lg transition duration-300 group-hover:opacity-90" 
               />
               <span className={`text-xl font-bold text-center font-serif transition-colors duration-300 
-                ${isActive ? "text-[#143d03]" : "text-[#3b1b00]"}`}>
+                ${isActive ? "text-[#143d03]" : "text-[#f5ead1]"}`}>
                 {item.label}
               </span>
             </div>
@@ -56,3 +56,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+//bg-[#f5ead1]
