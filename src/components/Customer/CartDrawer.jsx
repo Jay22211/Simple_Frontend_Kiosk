@@ -2,11 +2,18 @@ import React from "react";
 import { IoArrowBackCircle } from "react-icons/io5";
 import useCartStore from "./cartStore";
 import { HiTrash } from "react-icons/hi";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const CartDrawer = () => {
   const { cartItems, isCartOpen, closeCart, removeFromCart, clearCart, addToCart } = useCartStore();
+  const navigate = useNavigate(); // Initialize navigate
 
   const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+  // Function to handle checkout button click
+  const handleCheckout = () => {
+    navigate("/payment-method"); // Redirect to the PaymentMethod page
+  };
 
   return (
     <div
@@ -71,21 +78,21 @@ const CartDrawer = () => {
                     </button>
                     <span className="text-sm text-[#4b2e2e] font-medium">{item.quantity}</span>
                     {item.quantity > 1 ? (
-  <button
-    onClick={() => removeFromCart(item.id)}
-    className="w-6 h-6 flex items-center justify-center text-white bg-gray-400 hover:bg-gray-500 rounded"
-  >
-    -
-  </button>
-) : (
-  <button
-    onClick={() => removeFromCart(item.id)}
-    className="w-6 h-6 flex items-center justify-center text-white bg-red-500 hover:bg-red-600 rounded"
-    aria-label="Remove item"
-  >
-    <HiTrash className="text-base" />
-  </button>
-)}
+                      <button
+                        onClick={() => removeFromCart(item.id)}
+                        className="w-6 h-6 flex items-center justify-center text-white bg-gray-400 hover:bg-gray-500 rounded"
+                      >
+                        -
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => removeFromCart(item.id)}
+                        className="w-6 h-6 flex items-center justify-center text-white bg-red-500 hover:bg-red-600 rounded"
+                        aria-label="Remove item"
+                      >
+                        <HiTrash className="text-base" />
+                      </button>
+                    )}
                   </div>
                 </div>
               ))
@@ -98,7 +105,10 @@ const CartDrawer = () => {
                 <span>Total</span>
                 <span>₱{total.toFixed(2)}</span>
               </div>
-              <button className="w-full bg-[#4b2e2e] text-white py-2 rounded hover:bg-[#3a2323] transition">
+              <button
+                onClick={handleCheckout} // Trigger checkout navigation
+                className="w-full bg-[#4b2e2e] text-white py-2 rounded hover:bg-[#3a2323] transition"
+              >
                 Proceed to Checkout
               </button>
             </div>
