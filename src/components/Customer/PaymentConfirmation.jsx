@@ -1,27 +1,60 @@
-// src/pages/CashConfirmation.jsx
-import React, { useEffect, useState } from "react";
-import useCartStore from "../Customer/cartStore"; // adjust path as needed
+import React, { useEffect, useState, useRef } from "react";
+import useCartStore from "../Customer/cartStore";
 import { useNavigate } from "react-router-dom";
 
-const CashConfirmation = () => {
+const PaymentConfirmation = () => {
   const { cartItems, clearCart } = useCartStore();
   const [orderNumber, setOrderNumber] = useState("");
   const navigate = useNavigate();
+  const hasSentOrder = useRef(false); // 🛡️ New protection!
 
-  // Generate a simple random order number on mount
   useEffect(() => {
-    const generateOrderNumber = () => {
-      return "ORD" + Math.floor(100000 + Math.random() * 900000);
-    };
-    setOrderNumber(generateOrderNumber());
+    if (hasSentOrder.current) return; // 🛡️ already sent, skip
+    hasSentOrder.current = true; // Mark as sent
 
-    // Simulate sending to backend/cashier (optional for now)
-    // You can integrate a POST request here later
-  }, []);
+    const sendOrder = async () => {
+      try {
+        const API_URL = 'http://localhost:5000/api/orders';
+  
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            items: cartItems,
+            paymentMethod: "cash",
+          }),
+        });
+  
+        console.log("Response status:", res.status);
+  
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`Error: ${res.status} - ${text}`);
+        }
+  
+        const responseBody = await res.json();
+        console.log("Response body:", responseBody);
+  
+        // Set the order number from the response body
+        setOrderNumber(responseBody.orderNumber);
+
+      } catch (err) {
+        console.error("Error submitting order:", err);
+      }
+    };
+  
+    sendOrder();
+
+    return () => {
+      console.log('Cleanup if needed');
+    };
+  }, []); // ✅
 
   const handleFinish = () => {
     clearCart();
-    navigate("/"); // Back to menu or homepage
+    navigate("/");
   };
 
   return (
@@ -54,7 +87,4 @@ const CashConfirmation = () => {
   );
 };
 
-export default CashConfirmation;
-
-
-
+export default PaymentConfirmation;

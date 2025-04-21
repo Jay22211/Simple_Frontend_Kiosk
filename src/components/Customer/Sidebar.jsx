@@ -1,59 +1,92 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import {
+  FaCoffee,
+  FaMugHot,
+  FaCocktail,
+  FaBirthdayCake,
+  FaHamburger,
+  FaBars,
+  FaTimes,
+} from 'react-icons/fa'; // React Icons
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false); // sidebar toggle for mobile
 
   const routes = [
-    { label: "Espresso", path: "/kiosk/espresso", img: "/Espresso3.png" },
-    { label: "NonCoffee", path: "/kiosk/nonCoffee", img: "/images/Americano.jpg" },
-    { label: "FruitySoda", path: "/kiosk/fruitySoda", img: "/images/Americano.jpg" },
-    { label: "Pastries", path: "/kiosk/pastries", img: "/box.png" },
+    { label: "Espresso", path: "/kiosk/espresso", icon: <FaMugHot size={30} /> },
+    { label: "NonCoffee", path: "/kiosk/nonCoffee", icon: <FaCoffee size={30} /> },
+    { label: "FruitySoda", path: "/kiosk/fruitySoda", icon: <FaCocktail size={30} /> },
+    { label: "Pastries", path: "/kiosk/pastries", icon: <FaBirthdayCake size={30} /> },
+    { label: "Snacks", path: "/kiosk/snacks", icon: <FaHamburger size={30} /> },
   ];
 
   return (
-    <div className="w-[240px] min-w-[240px] h-screen bg-[#4b2e2e] border-r p-4 flex flex-col items-center overflow-y-auto space-y-6 sidebar-no-scroll">
-      {/* Logo */}
-      <div className="flex justify-center mb-8">
-        <img 
-          src="/moonbuckslogo.png"
-          alt="Moon Bucks Logo" 
-          className="w-40 h-40 object-contain"
-        />
+    <>
+      {/* Toggle Button - only visible on small screens */}
+      <div className="md:hidden fixed top-4 left-4 z-50">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="text-white bg-[#4b2e2e] p-3 rounded-full shadow-md"
+        >
+          {isOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
+        </button>
       </div>
 
-      {/* Navigation */}
-      <div className="w-full space-y-4">
-        {routes.map((item) => {
-          const isActive = location.pathname === item.path;
+      {/* Sidebar */}
+      <div className={`
+        fixed md:static z-40 top-0 left-0 h-full bg-[#4b2e2e] p-4 border-r flex flex-col items-center overflow-y-auto space-y-6 transition-transform duration-300
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
+        md:translate-x-0 md:w-[240px] md:min-w-[240px]
+      `}>
+        {/* Logo */}
+        <div
+          className="flex justify-center mb-8 cursor-pointer transition-transform hover:scale-105"
+          onClick={() => {
+            setIsOpen(false);
+            navigate('/kiosk');
+          }}
+        >
+          <img
+            src="/moonbuckslogo.png"
+            alt="Moon Bucks Logo"
+            className="w-40 h-40 object-contain"
+          />
+        </div>
 
-          return (
-            <div
-              key={item.label}
-              onClick={() => navigate(item.path)}
-              className={`flex flex-col items-center cursor-pointer p-3 rounded-lg transition-all duration-300
-                ${isActive 
-                  ? "bg-[#ecb233] border-l-4 border-[#ecb233] shadow-md scale-[1.02]" 
-                  : "hover:bg-[#ff9a16]/50"
-                }`}
-            >
-              <img 
-                src={item.img} 
-                alt={item.label} 
-                className="w-24 h-24 mb-4 object-cover rounded-lg transition duration-300 group-hover:opacity-90" 
-              />
-              <span className={`text-xl font-bold text-center font-serif transition-colors duration-300 
-                ${isActive ? "text-[#143d03]" : "text-[#f5ead1]"}`}>
-                {item.label}
-              </span>
-            </div>
-          );
-        })}
+        {/* Navigation */}
+        <div className="w-full space-y-4">
+          {routes.map((item) => {
+            const isActive = location.pathname === item.path;
+
+            return (
+              <button
+                key={item.label}
+                onClick={() => {
+                  navigate(item.path);
+                  setIsOpen(false); // close sidebar on mobile after click
+                }}
+                className={`w-full py-4 px-3 rounded-2xl font-bold text-lg font-serif text-center transition-all duration-300 flex flex-col items-center shadow-md border-2
+                  ${isActive
+                    ? "bg-[#ecb233] text-[#143d03] border-[#143d03] scale-[1.03]"
+                    : "bg-[#f5ead1] text-[#4b2e2e] hover:bg-[#ffe4a3] border-transparent"
+                  }`}
+              >
+                <div className="mb-1 text-2xl">{item.icon}</div>
+                <span>{item.label}</span>
+                <span className="text-xs italic mt-1 text-[#333]">Tap Me!</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
 export default Sidebar;
+
+
 //bg-[#f5ead1]

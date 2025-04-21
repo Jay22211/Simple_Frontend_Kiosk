@@ -1,71 +1,39 @@
-// FruitySoda.jsx
 import React, { useState } from "react";
 import Sidebar from "../Sidebar";
-import { AiFillRest } from "react-icons/ai";
-import { IoArrowBackCircle } from "react-icons/io5";
 import useCartStore from "../cartStore";
 import CartDrawer from "../CartDrawer";
 import CartIcon from "../CartIcon";
+import { IoArrowBackCircle } from "react-icons/io5";
 
-const fruitySoda = [
+const snacks = [
   {
-    id: 21,
-    name: "Passion Fruit",
-    description: "Tropical vibes with a citrus punch that’s both sweet and refreshing.",
-    variations: {
-      tall: 110,
-      grande: 125,
-    },
-    img: "/images/PassionFruit.png",
-    alt: "Passion fruit soda in a chilled glass.",
+    id: 40,
+    name: "Carbonara",
+    description: "Creamy, cheesy pasta topped with savory bacon bits.",
+    price: 165,
+    img: "/images/Carbonara.png",
+    alt: "Delicious creamy carbonara pasta",
   },
   {
-    id: 22,
-    name: "Blueberry",
-    description: "Bursts of blueberry flavor with every sip, bubbly and bright.",
-    variations: {
-      tall: 110,
-      grande: 125,
-    },
-    img: "/images/Blueberry.png",
-    alt: "Blueberry fizz topped with berries.",
+    id: 41,
+    name: "Cheesy Bacon Fries",
+    description: "Crispy fries topped with gooey cheese and crispy bacon.",
+    price: 145,
+    img: "/images/CheesyBaconFries.png",
+    alt: "Cheesy bacon loaded fries",
   },
   {
-    id: 23,
-    name: "Green Apple",
-    description: "A zesty green apple twist, tangy and ultra-refreshing.",
-    variations: {
-      tall: 110,
-      grande: 125,
-    },
-    img: "/images/GreenApple.png",
-    alt: "Cool green apple soda with fizz.",
-  },
-  {
-    id: 24,
-    name: "Lychee",
-    description: "Floral and fruity notes of lychee perfectly balanced in soda.",
-    variations: {
-      tall: 110,
-      grande: 125,
-    },
-    img: "/images/Lychee.png",
-    alt: "Lychee soda served with ice.",
+    id: 42,
+    name: "Chicken Tender and Fries",
+    description: "Golden-fried chicken tenders served with seasoned fries.",
+    price: 185,
+    img: "/images/ChickenTenderFries.png",
+    alt: "Crispy chicken tenders and fries",
   },
 ];
 
-const sizeOptions = ["Tall", "Grande"];
-
-const getPriceRange = (item) => {
-  const prices = Object.values(item.variations);
-  const min = Math.min(...prices);
-  const max = Math.max(...prices);
-  return `₱${min} - ₱${max}`;
-};
-
-const FruitySoda = () => {
+const Snacks = () => {
   const [selectedItem, setSelectedItem] = useState(null);
-  const [selectedSize, setSelectedSize] = useState("Grande");
   const [showBubble, setShowBubble] = useState(false);
   const [bubbleImg, setBubbleImg] = useState(null);
 
@@ -73,7 +41,6 @@ const FruitySoda = () => {
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
-    setSelectedSize("Grande");
   };
 
   const handleClose = () => {
@@ -84,18 +51,14 @@ const FruitySoda = () => {
     addToCart({
       id: selectedItem.id,
       name: selectedItem.name,
-      size: selectedSize,
-      temperature: "", // not needed
-      price: selectedItem.variations[selectedSize.toLowerCase()],
+      price: selectedItem.price,
       img: selectedItem.img,
     });
 
     setBubbleImg(selectedItem.img);
     setShowBubble(true);
-
     setTimeout(() => setShowBubble(false), 1000);
     setTimeout(() => setBubbleImg(null), 1000);
-
     handleClose();
   };
 
@@ -104,12 +67,12 @@ const FruitySoda = () => {
       <Sidebar />
       <div className="flex-grow overflow-y-auto px-4 py-10 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-extrabold text-[#4b2e2e] mb-10 text-center font-poppins">
-          Fruity Soda
+          Snacks
         </h1>
         <hr className="border-t-2 border-[#4b2e2e] w-30 mx-auto mb-5" />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {fruitySoda.map((item, index) => (
+          {snacks.map((item, index) => (
             <div
               key={item.id}
               onClick={() => handleItemClick(item)}
@@ -126,11 +89,11 @@ const FruitySoda = () => {
               </h3>
               <div className="flex justify-center mt-3">
                 <div className="bg-[#4b2e2e] text-white px-4 py-1 rounded-full text-sm font-semibold shadow-sm">
-                  {getPriceRange(item)}
+                  ₱{item.price}
                 </div>
               </div>
               <p className="text-center text-sm text-[#4b2e2e] mt-2 italic">
-                Tall & Grande sizes available
+                {item.description}
               </p>
             </div>
           ))}
@@ -158,49 +121,20 @@ const FruitySoda = () => {
                 alt={selectedItem.alt}
                 className="w-60 h-62 object-contain rounded-xl drop-shadow-lg"
               />
-
               <div className="flex-1">
-                <h2 className="text-3xl font-bold font-playfair text-[#4b2e2e] mb-2">
+                <h2 className="text-3xl font-bold font-playfair text-[#4b2e2e] mb-4">
                   {selectedItem.name}
                 </h2>
                 <p className="text-gray-600 italic mb-6 max-w-md text-base">
                   {selectedItem.description}
                 </p>
 
-                <div className="mb-6">
-                  <h4 className="text-md font-semibold mb-3 text-[#4b2e2e] text-center md:text-left">
-                    Choose Size:
-                  </h4>
-                  <div className="flex justify-center md:justify-start gap-6">
-                    {sizeOptions.map((size) => (
-                      <div
-                        key={size}
-                        onClick={() => setSelectedSize(size)}
-                        className="flex flex-col items-center cursor-pointer group"
-                      >
-                        <div
-                          className={`flex items-center justify-center w-14 h-14 rounded-full transition-all duration-300 ${
-                            selectedSize === size
-                              ? "bg-[#4b2e2e] text-white shadow-md"
-                              : "bg-gray-100 text-gray-600 group-hover:bg-gray-200"
-                          }`}
-                        >
-                          <AiFillRest className={size === "Tall" ? "text-xl" : "text-3xl"} />
-                        </div>
-                        <span className="mt-2 text-sm font-medium text-[#4b2e2e]">{size}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
                 <div className="bg-[#f5ead1] rounded-xl p-4 mb-6 text-center shadow-sm border border-[#e4d3b6] mx-auto w-130">
                   <p className="text-sm text-[#4b2e2e] font-semibold mb-1">Your Selection:</p>
                   <p className="text-lg font-playfair text-[#4b2e2e]">
-                    {selectedSize} {selectedItem.name}
+                    {selectedItem.name}
                   </p>
-                  <p className="text-xl font-bold text-[#4b2e2e]">
-                    ₱{selectedItem.variations[selectedSize.toLowerCase()]}
-                  </p>
+                  <p className="text-xl font-bold text-[#4b2e2e]">₱{selectedItem.price}</p>
                 </div>
 
                 <button
@@ -218,7 +152,7 @@ const FruitySoda = () => {
       {showBubble && (
         <div className="fixed top-30 right-12 z-[9999] animate-floatUp transition-opacity duration-1000">
           <div className="relative bg-white rounded-full shadow-xl border border-[#4b2e2e]/20 w-16 h-16 p-1 flex items-center justify-center">
-            <div className="absolute -top-2 right-5.6 w-5 h-5 bg-white transform rotate-45 border-t border-l border-[#4b2e2e]/20" />
+            <div className="absolute -top-2 right-5.5 w-5 h-5 bg-white transform rotate-45 border-t border-l border-[#4b2e2e]/20" />
             <img
               src={bubbleImg}
               alt="added to cart"
@@ -234,4 +168,4 @@ const FruitySoda = () => {
   );
 };
 
-export default FruitySoda;
+export default Snacks;
