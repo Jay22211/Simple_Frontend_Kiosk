@@ -6,7 +6,7 @@ const Counter = require('../models/Counter'); // <-- import Counter model
 // Create a new order
 router.post('/', async (req, res) => {
   try {
-    const { items, paymentMethod, dineOption } = req.body;
+    const { items, paymentMethod, dineOption, totalPrice } = req.body;
 
     if (!dineOption) {
       return res.status(400).json({ error: "Dine option is required" });
@@ -60,6 +60,15 @@ router.put('/mark-as-paid/:id', async (req, res) => {
     const { amountReceived } = req.body; // Amount the customer gave
     const orderId = req.params.id;
 
+    // Log the incoming data for debugging
+    console.log('Received amount:', amountReceived);  // <-- Add this line for logging
+    const amountReceivedNumber = Number(amountReceived);
+
+    // Ensure that the amountReceived is a valid number
+    if (isNaN(amountReceivedNumber)) {
+      return res.status(400).json({ message: 'Invalid amount received' });
+    }
+
     // Find the order by ID
     const order = await Order.findById(orderId);
 
@@ -69,15 +78,17 @@ router.put('/mark-as-paid/:id', async (req, res) => {
 
     // Ensure that the amount received is greater than or equal to the total price
     const totalPrice = order.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    if (amountReceived < totalPrice) {
+    console.log('Total Price:', totalPrice, 'Amount Received:', amountReceivedNumber);
+
+    if (amountReceivedNumber < totalPrice) {
       return res.status(400).json({ message: 'Amount received is less than the total price' });
     }
 
     // Calculate change
-    const changeGiven = amountReceived - totalPrice;
+    const changeGiven = amountReceivedNumber - totalPrice;
 
     // Update order fields
-    order.amountReceived = amountReceived;
+    order.amountReceived = amountReceivedNumber;
     order.changeGiven = changeGiven;
     order.status = 'paid';
     order.paidAt = new Date(); // Store the time of payment
@@ -88,7 +99,7 @@ router.put('/mark-as-paid/:id', async (req, res) => {
     res.status(200).json(updatedOrder);
   } catch (error) {
     console.error('Error marking order as paid:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error', detail: error.message });
   }
 });
 

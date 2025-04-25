@@ -5,31 +5,19 @@ import { FaSignOutAlt } from 'react-icons/fa';
 const CashierDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [amountGiven, setAmountGiven] = useState('');
-  const audioRef = React.useRef(new Audio('/soundeffects/Alert.mp3')); // Corrected path
-  const [prevOrderCount, setPrevOrderCount] = useState(0);
+  const [amountGiven, setAmountGiven] = useState(0);
 
   const fetchOrders = async () => {
     try {
       const res = await axios.get('http://localhost:5000/api/orders');
-      if (res.data.length > prevOrderCount) {
-        audioRef.current.play();    
-      }
       setOrders(res.data);
-      setPrevOrderCount(res.data.length);
     } catch (err) {
       console.error('Failed to fetch orders:', err);
+      alert('Failed to fetch orders. Please try again later.');
     }
   };
 
   useEffect(() => {
-    // Load audio after user interacts (fixes autoplay restriction)
-    const unlockAudio = () => {
-      audioRef.current.load();
-      window.removeEventListener('click', unlockAudio);
-    };
-    window.addEventListener('click', unlockAudio);
-
     fetchOrders();
     const intervalId = setInterval(fetchOrders, 5000);
     return () => clearInterval(intervalId);
@@ -37,7 +25,7 @@ const CashierDashboard = () => {
 
   const handleSelectOrder = (order) => {
     setSelectedOrder(order);
-    setAmountGiven(''); // Reset amount when selecting new order
+    setAmountGiven(0);
   };
 
   const handleLogout = () => {
@@ -49,36 +37,33 @@ const CashierDashboard = () => {
     return date.toLocaleTimeString();
   };
 
-  const calculateTotal = (items) =>
-    items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const calculateTotal = (items) => {
+    if (!Array.isArray(items)) return 0;
+    return items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  };
 
   const totalAmount = selectedOrder ? calculateTotal(selectedOrder.items) : 0;
-  const change = amountGiven ? Math.max(0, amountGiven - totalAmount).toFixed(2) : '';
+  const change = amountGiven ? Math.max(0, amountGiven - totalAmount).toFixed(2) : '₱0.00';
 
-  // Function to handle marking order as paid
   const handleMarkAsPaid = async () => {
-  try {
-    const response = await axios.put(
-      `http://localhost:5000/api/orders/mark-as-paid/${selectedOrder._id}`,
-      {
-        amountGiven: parseFloat(amountGiven),
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/orders/mark-as-paid/${selectedOrder._id}`,
+        { amountReceived: amountGiven }
+      );
+
+      if (response.data.status === 'paid') {
+        alert('Order marked as paid!');
+        fetchOrders();
+        setSelectedOrder(null);
+      } else {
+        alert('Failed to mark order as paid.');
       }
-    );
-
-    // Handle successful payment marking
-    if (response.data.status === 'Paid') {
-      alert('Order marked as paid!');
-      fetchOrders(); // Refetch orders to update the status
-      setSelectedOrder(null); // Clear the selected order
-    } else {
-      alert('Failed to mark order as paid.');
+    } catch (error) {
+      console.error('Error marking order as paid:', error);
+      alert('An error occurred while marking the order as paid.');
     }
-  } catch (error) {
-    console.error('Error marking order as paid:', error);
-    alert('An error occurred while marking the order as paid.');
-  }
-};
-
+  };
 
   return (
     <div className="flex flex-col h-screen bg-[#f4f4f9]">
@@ -191,7 +176,7 @@ const CashierDashboard = () => {
               <div className="mt-6 flex gap-4">
                 <button
                   disabled={!amountGiven || parseFloat(amountGiven) < totalAmount}
-                  onClick={handleMarkAsPaid}  // Call the function here
+                  onClick={handleMarkAsPaid}
                   className={`px-6 py-3 rounded-lg transition duration-300 font-semibold ${
                     !amountGiven || parseFloat(amountGiven) < totalAmount
                       ? 'bg-gray-400 cursor-not-allowed text-white'
@@ -207,7 +192,7 @@ const CashierDashboard = () => {
               </div>
             </div>
           ) : (
-            <p className="text-gray-500">Select an order to view details.</p>
+            <p className="text-gray-500">Select an order to view details.</ p>
           )}
         </div>
       </div>
