@@ -12,8 +12,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Replace this with your MongoDB Atlas connection string
-
 
 mongoose.connect(mongoURI)
   .then(() => {

@@ -120,8 +120,13 @@ const NonCoffee = () => {
                 <div className="bg-[#4b2e2e] text-white px-4 py-1 rounded-full text-sm font-semibold shadow-sm">
                   {getPriceRange(item)}
                 </div>
-              </div>
+                </div>
+              <p className="text-center text-sm text-[#4b2e2e] mt-2 italic">
+              Tall & Grande sizes available
+              </p>
             </div>
+              
+            
           ))}
         </div>
       </div>
@@ -218,7 +223,7 @@ const NonCoffee = () => {
               src={bubbleImg}
               alt="added to cart"
               className="w-full h-full object-contain rounded-full"
-            />
+            />  
           </div>
         </div>
       )}

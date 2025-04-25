@@ -25,7 +25,7 @@ function App() {
         <Route path="/kiosk/fruitySoda" element={<FruitySoda />} />
         <Route path="/kiosk/pastries" element={<Pastries />} />
         <Route path="/kiosk/snacks" element={<Snacks />} />
-        <Route path="/payment-method" element={<PaymentMethod />} />  
+        <Route path="/paymentmethod" element={<PaymentMethod />} />  
         <Route path="/payment/cash" element={<CashConfirmation />} />
         <Route path="/cashier" element={<Cashier />} />
         <Route path="/cashier/dashboard" element={<Dashboard />} />

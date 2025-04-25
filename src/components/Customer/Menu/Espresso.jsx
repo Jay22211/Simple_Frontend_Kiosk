@@ -341,7 +341,7 @@ const Espresso = () => {
   </div>
 )}
 {showBubble && (
-  <div className="fixed top-30 right-12 z-[9999] animate-floatUp transition-opacity duration-1000">
+  <div className="fixed top-23 right-13 z-[9999] animate-floatUp transition-opacity duration-1000">
     <div className="relative bg-white rounded-full shadow-xl border border-[#4b2e2e]/20 w-16 h-16 p-1 flex items-center justify-center">
       {/* Bubble tail/arrow */}
       <div className="absolute -top-2 right-5.6 w-5 h-5 bg-white transform rotate-45 border-t border-l border-[#4b2e2e]/20" />

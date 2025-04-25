@@ -1,26 +1,64 @@
-import React from "react";
-import { IoArrowBackCircle } from "react-icons/io5";
-import useCartStore from "./cartStore";
+import React, { useState } from "react";
+import { IoArrowBackCircle, IoCloseCircle } from "react-icons/io5";  // Close icon
 import { HiTrash } from "react-icons/hi";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
+import useCartStore from "./cartStore";
 
 const CartDrawer = () => {
-  const { cartItems, isCartOpen, closeCart, removeFromCart, clearCart, addToCart } = useCartStore();
-  const navigate = useNavigate(); // Initialize navigate
+  const { cartItems, isCartOpen, closeCart, removeFromCart, clearCart, addToCart, setDineOption } = useCartStore();
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
 
   const total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-  // Function to handle checkout button click
   const handleCheckout = () => {
-    navigate("/payment-method"); // Redirect to the PaymentMethod page
+    setShowModal(true); // Show dine option modal first
+  };
+
+  const handleDineSelection = (option) => {
+    setDineOption(option);
+    setShowModal(false);  // Close the modal
+    closeCart();  // Close the cart drawer
+    navigate("/paymentmethod");  // Proceed to payment after selecting dine option
   };
 
   return (
     <div
-      className={`fixed top-0 right-0 h-full w-full bg-white shadow-xl z-50 transform transition-transform duration-300 ${
-        isCartOpen ? "translate-x-0" : "translate-x-full"
-      }`}
+      className={`fixed top-0 right-0 h-full w-full bg-white shadow-xl z-50 transform transition-transform duration-300 ${isCartOpen ? "translate-x-0" : "translate-x-full"}`}
     >
+      {/* Dine In / Take Out Modal */}
+      {showModal && (
+        <div className="absolute inset-0 flex items-center justify-center z-50 backdrop-blur-md">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-lg text-center relative">
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-4 right-4 text-3xl text-gray-500 hover:text-gray-700"
+              aria-label="Close Modal"
+            >
+              <IoCloseCircle />  {/* Close icon */}
+            </button>
+            <h2 className="text-2xl font-bold mb-4 text-[#4b2e2e]">Dine In or Take Out?</h2>
+            <div className="flex flex-col gap-4">
+              <button
+                onClick={() => handleDineSelection("dine-in")}
+                className="bg-[#4b2e2e] text-white py-3 rounded-xl hover:bg-[#3a2323] transition"
+                aria-label="Select Dine In"
+              >
+                Dine In
+              </button>
+              <button
+                onClick={() => handleDineSelection("take-out")}
+                className="bg-gray-700 text-white py-3 rounded-xl hover:bg-gray-800 transition"
+                aria-label="Select Take Out"
+              >
+                Take Out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Drawer Content */}
       <div className="h-full flex">
         <div className="w-1/3 bg-[#4b2e2e] relative">
           <button
@@ -57,18 +95,11 @@ const CartDrawer = () => {
                     alt={item.name}
                     className="w-20 h-20 object-cover rounded-lg"
                   />
-
                   <div className="flex-1">
                     <h4 className="font-semibold text-[#4b2e2e]">{item.name}</h4>
-                    <p className="text-sm text-gray-600">
-                      {item.size} • {item.temperature}
-                    </p>
-                    <p className="text-[#4b2e2e] font-bold">
-                      ₱{(item.price * item.quantity).toFixed(2)}
-                    </p>
+                    <p className="text-sm text-gray-600">{item.size} • {item.temperature}</p>
+                    <p className="text-[#4b2e2e] font-bold">₱{(item.price * item.quantity).toFixed(2)}</p>
                   </div>
-
-                  {/* Quantity controls */}
                   <div className="flex flex-col items-center justify-between gap-2">
                     <button
                       onClick={() => addToCart(item)}
@@ -88,7 +119,6 @@ const CartDrawer = () => {
                       <button
                         onClick={() => removeFromCart(item.id)}
                         className="w-6 h-6 flex items-center justify-center text-white bg-red-500 hover:bg-red-600 rounded"
-                        aria-label="Remove item"
                       >
                         <HiTrash className="text-base" />
                       </button>
@@ -106,7 +136,7 @@ const CartDrawer = () => {
                 <span>₱{total.toFixed(2)}</span>
               </div>
               <button
-                onClick={handleCheckout} // Trigger checkout navigation
+                onClick={handleCheckout}
                 className="w-full bg-[#4b2e2e] text-white py-2 rounded hover:bg-[#3a2323] transition"
               >
                 Proceed to Checkout
