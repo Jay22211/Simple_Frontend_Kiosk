@@ -9,7 +9,7 @@ const CashierDashboard = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/orders');
+      const res = await axios.get('http://localhost:5000/api/orders/pending');
       setOrders(res.data);
     } catch (err) {
       console.error('Failed to fetch orders:', err);
@@ -43,7 +43,7 @@ const CashierDashboard = () => {
   };
 
   const totalAmount = selectedOrder ? calculateTotal(selectedOrder.items) : 0;
-  const change = amountGiven ? Math.max(0, amountGiven - totalAmount).toFixed(2) : '₱0.00';
+  const change = amountGiven ? Math.max(0, amountGiven - totalAmount).toFixed(2) : '0.00';
 
   const handleMarkAsPaid = async () => {
     try {
@@ -53,7 +53,7 @@ const CashierDashboard = () => {
       );
 
       if (response.data.status === 'paid') {
-        alert('Order marked as paid!');
+        
         fetchOrders();
         setSelectedOrder(null);
       } else {

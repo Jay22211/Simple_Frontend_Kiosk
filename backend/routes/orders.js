@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../models/Order');
 const Counter = require('../models/Counter'); // <-- import Counter model
+const PaidOrder = require('../models/PaidOrder');
 
 // Create a new order
 router.post('/', async (req, res) => {
@@ -45,60 +46,65 @@ router.post('/', async (req, res) => {
 });
 
 // Get all orders
-router.get('/', async (req, res) => {
+router.get('/pending', async (req, res) => {
   try {
-    const orders = await Order.find(); // Fetch all orders from the database
-    res.status(200).json(orders); // Send orders as a response
+    const orders = await Order.find({ status: 'pending' });
+    res.status(200).json(orders);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch orders', detail: err.message });
+    res.status(500).json({ error: 'Failed to fetch pending orders', detail: err.message });
   }
 });
+
 
 // Update order status to "paid"
 router.put('/mark-as-paid/:id', async (req, res) => {
   try {
-    const { amountReceived } = req.body; // Amount the customer gave
+    const { amountReceived } = req.body;
     const orderId = req.params.id;
-
-    // Log the incoming data for debugging
-    console.log('Received amount:', amountReceived);  // <-- Add this line for logging
     const amountReceivedNumber = Number(amountReceived);
 
-    // Ensure that the amountReceived is a valid number
     if (isNaN(amountReceivedNumber)) {
       return res.status(400).json({ message: 'Invalid amount received' });
     }
 
-    // Find the order by ID
     const order = await Order.findById(orderId);
-
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    // Ensure that the amount received is greater than or equal to the total price
     const totalPrice = order.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    console.log('Total Price:', totalPrice, 'Amount Received:', amountReceivedNumber);
 
     if (amountReceivedNumber < totalPrice) {
       return res.status(400).json({ message: 'Amount received is less than the total price' });
     }
 
-    // Calculate change
     const changeGiven = amountReceivedNumber - totalPrice;
 
-    // Update order fields
     order.amountReceived = amountReceivedNumber;
     order.changeGiven = changeGiven;
     order.status = 'paid';
-    order.paidAt = new Date(); // Store the time of payment
+    order.paidAt = new Date();
 
-    // Save updated order
-    const updatedOrder = await order.save();
+    await order.save();
 
-    res.status(200).json(updatedOrder);
+    const paidOrder = new PaidOrder({
+      oorderNumber: Number(order.orderNumber.toString().replace('#', '')),
+      items: order.items,
+      totalPrice: totalPrice,
+      amountReceived: Number(order.amountReceived),
+  changeGiven: Number(order.changeGiven),
+      status: 'paid',
+      paidAt: order.paidAt,
+      paymentMethod: order.paymentMethod,
+      dineOption: order.dineOption,
+    });
+
+    await paidOrder.save();
+    await Order.findByIdAndDelete(orderId);
+
+    res.status(200).json({ message: 'Order archived to Paid Order successfully', status: 'paid' });
   } catch (error) {
-    console.error('Error marking order as paid:', error);
+    console.error('Error archiving order:', error);
     res.status(500).json({ message: 'Server error', detail: error.message });
   }
 });

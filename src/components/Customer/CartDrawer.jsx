@@ -4,6 +4,7 @@ import { HiTrash } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import useCartStore from "./cartStore";
 
+
 const CartDrawer = () => {
   const { cartItems, isCartOpen, closeCart, removeFromCart, clearCart, addToCart, setDineOption } = useCartStore();
   const navigate = useNavigate();
