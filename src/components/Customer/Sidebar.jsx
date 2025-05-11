@@ -13,19 +13,20 @@ import {
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(false); // sidebar toggle for mobile
+  const [isOpen, setIsOpen] = useState(false); // Sidebar toggle for mobile
 
+  // Define routes to be used in sidebar
   const routes = [
     { label: "Espresso", path: "/kiosk/espresso", icon: <FaMugHot size={30} /> },
-    { label: "NonCoffee", path: "/kiosk/nonCoffee", icon: <FaCoffee size={30} /> },
-    { label: "FruitySoda", path: "/kiosk/fruitySoda", icon: <FaCocktail size={30} /> },
+    { label: "Non-Coffee", path: "/kiosk/nonCoffee", icon: <FaCoffee size={30} /> },
+    { label: "Fruity Soda", path: "/kiosk/fruitySoda", icon: <FaCocktail size={30} /> },
     { label: "Pastries", path: "/kiosk/pastries", icon: <FaBirthdayCake size={30} /> },
     { label: "Snacks", path: "/kiosk/snacks", icon: <FaHamburger size={30} /> },
   ];
 
   return (
     <>
-      {/* Toggle Button - only visible on small screens */}
+      {/* Toggle Button - visible on small screens */}
       <div className="md:hidden fixed top-4 left-4 z-50">
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -56,23 +57,25 @@ const Sidebar = () => {
           />
         </div>
 
-        {/* Navigation */}
+        {/* Navigation Links */}
         <div className="w-full space-y-4">
           {routes.map((item) => {
-            const isActive = location.pathname === item.path;
+            const isActive = location.pathname === item.path; // Check if current route is active
 
             return (
               <button
                 key={item.label}
                 onClick={() => {
-                  navigate(item.path);
-                  setIsOpen(false); // close sidebar on mobile after click
+                  navigate(item.path); // Navigate to route
+                  setIsOpen(false); // Close sidebar on mobile after click
                 }}
-                className={`w-full py-4 px-3 rounded-2xl font-bold text-lg font-serif text-center transition-all duration-300 flex flex-col items-center shadow-md border-2
+                className={`
+                  w-full py-4 px-3 rounded-2xl font-bold text-lg font-serif text-center transition-all duration-300 flex flex-col items-center shadow-md border-2
                   ${isActive
                     ? "bg-[#ecb233] text-[#143d03] border-[#143d03] scale-[1.03]"
                     : "bg-[#f5ead1] text-[#4b2e2e] hover:bg-[#ffe4a3] border-transparent"
-                  }`}
+                  }
+                `}
               >
                 <div className="mb-1 text-2xl">{item.icon}</div>
                 <span>{item.label}</span>
@@ -87,6 +90,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
-
-//bg-[#f5ead1]
